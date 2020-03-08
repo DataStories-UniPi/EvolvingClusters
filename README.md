@@ -1,7 +1,8 @@
+# EvolvingClusters: Online Discovery of Group Patterns in Mobility Data
 
-# EvolvingClustersAlgorithm
+A Python3 implementation of the EvolvingClusters algorithm.
 
-The EvolvingClusters group pattern mining algorithm python implementation.
+
 
 ## Installation
 
@@ -9,20 +10,51 @@ Install the dependencies included with the following command
 ``` Python
 pip install -r requirements.txt
 ```
+
+
 ## Usage
 
-Import and run the evolving_clusters function as follows
-``` Python
-from EvovlingClusters import evolving_clusters
+EvolvingClusters can be used in two variations, depending on the use-case. If EvolvingClusters is part of general online pipeline, the ```evolving_clusters_single``` method should be used, as the following example suggests:
 
-results = evolving_clusters(data, clustering_mode, distance_threshold, cardinality_threshold, time_threshold)
+```Python
+import pandas as pd
+from EvolvingClusters import evolving_clusters_single
+
+df = Dataset_Pandas_DataFrame
+
+active = [pd.DataFrame(), pd.DataFrame()] # The active patterns list
+closed = [pd.DataFrame(), pd.DataFrame()] # The closed patterns list
+
+for incoming_timeslice in df.groupby('timestamp'):
+    ...
+    active, closed = evolving_clusters_single(timeslice, distance_threshold=1852, min_cardinality=5, time_threshold=15, active_patterns=active, closed_patterns=closed)
+    ...
+
+evolving_clusters_tp = [pd.concat(active_tp, closed_tp) for active_tp, closed_tp in zip(active, closed)]
 ```
+
+To use EvolvingClusters in standalone mode, the ```evolving_clusters``` method should be used, as suggested by the following example:
+
+```Python
+import pandas as pd
+from EvolvingClusters import evolving_clusters
+
+df = Dataset_Pandas_DataFrame
+
+evolving_clusters_tp = evolving_clusters(df, min_cardinality=5, time_threshold=15, distance_threshold=1852)
+```
+
+
 ## Contributors
 George S. Theodoropoulos, Andreas Tritsarolis, Yannis Theodoridis; Data Science Lab., University of Piraeus
 
-## Acknowledgment
 
-This work was partially supported by the Greek Ministry of Development andInvestment, General Secretariat of Research and Technology, under the Operational Programme Competitiveness, Entrepreneurship and Innovation 2014-2020(grant T1EDK-03268, i4Sea)
+
+## Acknowledgement
+
+This work was partially supported by the Greek Ministry of Development andInvestment, General Secretariat of Research and Technology, under the Operational Programme Competitiveness, Entrepreneurship and Innovation 2014-2020 (grant T1EDK-03268, i4Sea)
+
+
 
 ## Citation info
 
