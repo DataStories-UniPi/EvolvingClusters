@@ -16,3 +16,4 @@ pytz==2019.3
 Shapely==1.6.4.post2
 six==1.13.0
 tqdm==4.40.1
+kafka-python==2.0.1

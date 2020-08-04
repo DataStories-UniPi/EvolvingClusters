@@ -45,6 +45,17 @@ evolving_clusters_tp = evolving_clusters(df, min_cardinality=5, time_threshold=1
 ```
 
 
+
+## Kafka Implementation
+
+Except (baseline) Python applications, EvolvingClusters can also be used as part of data streaming pipelines. The ```EvolvingClustersKafka.py``` script demonstrates that, by integrating the algorithm into the popular data streaming platform, [Apache Kafka](https://kafka.apache.org/).
+
+The aforementioned script loads a CSV file into a Kafka Topic, consumes it (one message at a time), and saves the aligned timeslices as well as the discovered evolving clusters into their respective Kafka Topics, ready to be used by another application.
+
+More regarding the operation of ```EvolvingClustersKafka.py``` can be found at ```doc/ec_kafka_tr.pdf``` and ```lib/README.md```.
+
+
+
 ## Contributors
 George S. Theodoropoulos, Andreas Tritsarolis, Yannis Theodoridis; Data Science Lab., University of Piraeus
 

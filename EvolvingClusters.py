@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from haversine import haversine
+from haversine import haversine, Unit
 import networkx as nx
 from tqdm import tqdm as tqdm
 import geopandas as gpd
@@ -16,7 +16,7 @@ def pairs_in_radius(df, diam=1000):
 	'''
 	res = []
 	for ind_i, ind_j, val_i, val_j in nparray_combinations(df):
-		dist = haversine(val_i, val_j)*1000
+		dist = haversine(val_i, val_j, unit=Unit.KILOMETERS)*1000
 		if (dist<diam):
 			res.append((ind_i,ind_j))
 	return res
@@ -159,7 +159,7 @@ def evolving_clusters_single(timeslice, coordinate_names=['lon', 'lat'], tempora
 	'''
 
 	if not set(coordinate_names + [temporal_name]).issubset(timeslice.columns):
-		raise AttributeError(f'Timeslice DataFrame must include proper Spatial (e.g. "lat", "lon") and Temporal (e.g. "datetime") columns.')
+		raise AttributeError('Timeslice DataFrame must include proper Spatial (e.g. "lat", "lon") and Temporal (e.g. "datetime") columns.')
 
 	ts = pd.to_datetime(timeslice[temporal_name].unique()[0], unit=temporal_unit)
 
