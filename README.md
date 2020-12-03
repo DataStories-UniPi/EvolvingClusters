@@ -57,19 +57,19 @@ More regarding the operation of ```EvolvingClustersKafka.py``` can be found at `
 
 
 ## Contributors
-George S. Theodoropoulos, Andreas Tritsarolis, Yannis Theodoridis; Data Science Lab., University of Piraeus
+
+Andreas Tritsarolis, George S. Theodoropoulos, Yannis Theodoridis; Data Science Lab., University of Piraeus
 
 
 
 ## Acknowledgement
 
-This work was partially supported by the Greek Ministry of Development andInvestment, General Secretariat of Research and Technology, under the Operational Programme Competitiveness, Entrepreneurship and Innovation 2014-2020 (grant T1EDK-03268, i4Sea)
-
+This work was partially supported by projects i4Sea (grant T1EDK-03268) and Track&Know (grant agreement No 780754), which have received funding by the European Regional Development Fund of the EU and Greek national funds (through the Operational Program Competitiveness, Entrepreneurship and Innovation, under the call Research-Create-Innovate) and the EU Horizon 2020 R&I Programme, respectively.
 
 
 ## Citation info
 
 If you use EvolvingClusters in your project, we would appreciate citations to the following paper:
 
->George S. Theodoropoulos, Andreas Tritsarolis, and Yannis Theodoridis (2019) EvolvingClusters: Online Discovery of Group Patterns in Enriched Maritime Data. In Proceedings of MASTER Workshop at ECML/PKDD Conference, Würzburg, Germany. Springer LNCS/LNAI.
+> Andreas Tritsarolis, George-Stylianos Theodoropoulos, Yannis Theodoridis (2020) Online discovery of co-movement patterns in mobility data. International Journal of Geographical Information Science, Taylor & Francis. https://doi.org/10.1080/13658816.2020.1834562
 
