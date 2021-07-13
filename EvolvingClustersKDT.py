@@ -1,24 +1,42 @@
 import pandas as pd
 import numpy as np
-from haversine import haversine, Unit
+from haversine import haversine
 import networkx as nx
 from tqdm import tqdm as tqdm
 import geopandas as gpd
 import time, datetime
+from sklearn.neighbors import KDTree, BallTree
+import sys, os
 
 
-NUMBER_OF_CLUSTER_TYPES = 2 # The number of pattern types that will be handled by EvolvingClusters (according to the output of the ```connected_edges``` method)
+NUMBER_OF_CLUSTER_TYPES = 2 # The number of pattern types that will be handled by EvolvingClusters (according to the output of the ```connected_edges``` method).
+LEAF_SIZE = 40 # Number of points at which to switch to brute-force.
+
 
 
 def pairs_in_radius(df, diam=1000):
 	'''
-		Get all pairs with distance < diam
+		Get all pairs with distance <= diam
 	'''
+	global LEAF_SIZE
+	
+	# 25/07/2020 - Calculating (Euclidean) Distance using KD-Trees (fast)
+	# Note: sklearn.neighbors **does** support Haversine Metric
+	# -------------------------------------------------------------------
+	df_rad = np.deg2rad(df)
+	df_kdtree = BallTree(df_rad, leaf_size=LEAF_SIZE, metric='haversine') # The I/O in sklearn's haversine method is in radians
+	
+	# SciPy and ScikitLearn's Implementation of the BallTree Spatial Index is less-than-or-equal to a specified radius.
+	# In order to work on strictly less-than to a specified radius we decrease the radius by a -- very small -- constant
+	#  **alpha**, equal to 1e-9 (1 nanometer).
+	theta = (diam - 1e-9) / (6371 * 1000) # radians = distance (unit) / earth_radius (unit)
+	point_neighbors, dist = df_kdtree.query_radius(df_rad, return_distance=True, r=theta)
+
 	res = []
-	for ind_i, ind_j, val_i, val_j in nparray_combinations(df):
-		dist = haversine(val_i, val_j, unit=Unit.KILOMETERS)*1000
-		if (dist<diam):
-			res.append((ind_i,ind_j))
+	for point, neighbor in enumerate(point_neighbors):
+		if np.array_equal(neighbor, [point]): continue
+		res.extend([(point, point_i) for point_i in neighbor if point < point_i])
+
 	return res
 
 
@@ -39,23 +57,14 @@ def findMCinMCS(G, C_MCS):
 def connected_edges(data):
 	'''
 		Get circular (all points inside circle of diameter=diam) and density based (each pair with distance<diam) clusters
-	'''		
+	'''	
 	G = nx.Graph()
 	G.add_edges_from(data)
-
+	
 	C_MCS = [sorted(list(cluster)) for cluster in nx.connected_components(G)]
 	C_MC = [sorted(list(cluster)) for cluster in findMCinMCS(G, C_MCS)]
 
 	return [C_MCS, C_MC]
-
-
-def nparray_combinations(arr):
-	'''
-		Get all combinations of points
-	'''
-	for i in range(arr.shape[0]):
-		for j in range(i+1, arr.shape[0]):
-			yield i, j, arr[i,:], arr[j,:]
 
 
 def translate(sets, sdf, o_id):
